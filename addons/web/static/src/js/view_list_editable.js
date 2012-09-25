@@ -115,7 +115,7 @@ openerp.web.list_editable = function (openerp) {
 
     openerp.web.ListView.List.include(/** @lends openerp.web.ListView.List# */{
         row_clicked: function (event) {
-            if (!this.options.editable || event.toElement.className == 'oe-record-edit-link-img') {
+            if (!this.options.editable || event.toElement.name == 'edit') {
                 return this._super.apply(this, arguments);
             }
             this.edit_record($(event.currentTarget).data('id'));

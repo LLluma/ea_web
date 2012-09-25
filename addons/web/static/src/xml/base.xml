@@ -654,9 +654,7 @@
                     <t t-esc="column.string"/>
                 </th>
             </t>
-            <th t-if="options.selectable" width="1"  >
-                <input type="checkbox" class="all-record-selector"/> </th>
-            <th t-if="options.isClarkGable" width="1"> </th>
+            <th/>
             <t t-foreach="columns" t-as="column">
                 <th t-if="!column.meta and column.invisible !== '1'" t-att-data-id="column.id"
                     t-att-class="((options.sortable and column.tag !== 'button') ? 'oe-sortable' : null)">
@@ -716,13 +714,8 @@
 
         </td>
     </t>
-    <th t-if="options.selectable" class="oe-record-selector" width="1">
-        <t t-set="checked" t-value="options.select_view_id == record.get('id') ? 'checked' : null"/>
-        <input t-if="options.radio" type="radio" name="radiogroup" t-att-checked="checked"/>
-        <input t-if="!options.radio" type="checkbox" name="radiogroup" t-att-checked="checked"/>
-    </th>
     <th t-if="options.isClarkGable" class="oe-record-edit-link" width="1">
-        <img t-att-src='_s + "/web/static/src/img/pencil.gif"' width="12" height="12" class="oe-record-edit-link-img"/>
+        <button type="button" name="edit"></button>
     </th>
     <t t-foreach="columns" t-as="column">
         <t t-set="align" t-value="column.type === 'integer' or column.type == 'float'"/>

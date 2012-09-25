@@ -810,6 +810,7 @@ openerp.web.ListView.List = openerp.web.Class.extend( /** @lends openerp.web.Lis
         this.columns = opts.columns;
         this.dataset = opts.dataset;
         this.records = opts.records;
+        this.lastSelection;
 
         this.record_callbacks = {
             'remove': function (event, record) {
@@ -847,8 +848,22 @@ openerp.web.ListView.List = openerp.web.Class.extend( /** @lends openerp.web.Lis
 
         this.$_element = $('<tbody class="ui-widget-content">')
             .appendTo(document.body)
-            .delegate('th.oe-record-selector', 'click', function (e) {
+            .delegate('tr', 'click', function (e) {
                 e.stopPropagation();
+                var $row = $(this);
+                if (e.ctrlKey) {
+                    $row.toggleClass('selected');
+                } else if (e.shiftKey && self.lastSelection){
+                    first = Math.min(self.lastSelection, $row.context.rowIndex);
+                    last = Math.max(self.lastSelection, $row.context.rowIndex);
+                    $row.siblings().andSelf().slice(first-2, last-1).each(function(index, element) {
+                        $(element).addClass('selected');
+                    });
+                } else {
+                    $row.siblings().removeClass('selected');
+                    $row.toggleClass('selected');
+                }
+                self.lastSelection = $row.context.rowIndex;
                 var selection = self.get_selection();
                 $(self).trigger(
                         'selected', [selection.ids, selection.records]);
@@ -873,29 +888,29 @@ openerp.web.ListView.List = openerp.web.Class.extend( /** @lends openerp.web.Lis
                     return self.reload_record(self.records.get(record_id));
                 }]);
             })
-            .delegate('a', 'click', function (e) {
+            .delegate('th.oe-record-edit-link button', 'click', function (e) {
+                self.row_clicked(e, 'form');
+            })
+            .delegate('a', 'dblclick', function (e) {
                 e.stopPropagation();
             })
-            .delegate('tr', 'click', function (e) {
-                e.stopPropagation();
-                var row_id = self.row_id(e.currentTarget);
-                if (row_id !== undefined) {
-                    if (!self.dataset.select_id(row_id)) {
-                        throw "Could not find id in dataset"
-                    }
-                    var view;
-                    if ($(e.target).is('.oe-record-edit-link-img')) {
-                        view = 'form';
-                    }
-                    self.row_clicked(e, view);
-                }
-            });
+            .delegate('tr', 'dblclick', function (e) {
+                self.row_clicked(e, 'form');
+            })
     },
     row_clicked: function (e, view) {
-        $(this).trigger(
-            'row_link',
-            [this.dataset.ids[this.dataset.index],
-             this.dataset, view]);
+        var self = this;
+        e.stopPropagation();
+        var row_id = self.row_id(e.currentTarget) || self.row_id($(e.currentTarget).parents('tr'));
+        if (row_id !== undefined) {
+            if (!self.dataset.select_id(row_id)) {
+                throw "Could not find id in dataset"
+            }
+            $(self).trigger(
+                'row_link',
+                [self.dataset.ids[self.dataset.index],
+                self.dataset, view]);
+        }
     },
     render_cell: function (record, column) {
         var value;
@@ -959,9 +974,6 @@ openerp.web.ListView.List = openerp.web.Class.extend( /** @lends openerp.web.Lis
             return;
         }
         var cells = [];
-        if (this.options.selectable) {
-            cells.push('<th class="oe-record-selector"></td>');
-        }
         if (this.options.isClarkGable) {
             cells.push('<th class="oe-record-edit-link"></td>');
         }
@@ -997,7 +1009,7 @@ openerp.web.ListView.List = openerp.web.Class.extend( /** @lends openerp.web.Lis
             return result;
         }
         var records = this.records;
-        this.$current.find('th.oe-record-selector input:checked')
+        this.$current.find('tr.selected')
                 .closest('tr').each(function () {
             var record = records.get($(this).data('id'));
             result.ids.push(record.get('id'));
@@ -1355,7 +1367,8 @@ openerp.web.ListView.Groups = openerp.web.Class.extend( /** @lends openerp.web.L
             self.records.add(records, {silent: true});
             list.render();
             d.resolve(list);
-        });});
+        });
+        });
         return d.promise();
     },
     setup_resequence_rows: function (list, dataset) {

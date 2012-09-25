@@ -953,6 +953,15 @@ label.error {
 .openerp .oe-listview tr.odd {
     background-color: #f3f3f3;
 }
+.openerp .oe-listview tr.odd.selected {
+    background-color: #73B0FF;
+}
+.openerp .oe-listview tr.even.selected {
+    background-color: #9CC7FF;
+}
+.openerp .oe-listview tr.selected:hover {
+    background-color: #529DFF;
+}
 .openerp .oe-listview tbody tr:hover {
     background-color: #ecebf2;
 }
@@ -972,12 +981,16 @@ label.error {
 }
 
 .openerp .oe-record-delete button,
+.openerp .oe-record-edit-link button,
 .openerp button.oe-edit-row-save {
     border: none;
     height: 16px;
     width: 16px;
     background: url("/web/static/src/img/recycle_bin_empty.png") no-repeat scroll center center transparent;
     cursor: pointer;
+}
+.openerp .oe-record-edit-link button {
+    background: url("/web/static/src/img/pencil.gif") no-repeat scroll center center transparent;
 }
 .openerp .oe-record-delete button:hover,
 .openerp button.oe-edit-row-save:hover {
