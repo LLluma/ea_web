@@ -114,8 +114,8 @@ openerp.web.list_editable = function (openerp) {
     });
 
     openerp.web.ListView.List.include(/** @lends openerp.web.ListView.List# */{
-        row_clicked: function (event) {
-            if (!this.options.editable || event.toElement.name == 'edit') {
+        row_clicked: function (event, view) {
+            if (!this.options.editable || event.type != 'dblclick') {
                 return this._super.apply(this, arguments);
             }
             this.edit_record($(event.currentTarget).data('id'));

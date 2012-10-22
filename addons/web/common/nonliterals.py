@@ -43,9 +43,9 @@ class NonLiteralEncoder(simplejson.encoder.JSONEncoder):
                 '__eval_context': object.get_eval_context()
             }
         raise TypeError('Could not encode unknown non-literal %s' % object)
-    
+
 _ALLOWED_KEYS = frozenset(['__ref', "__id", '__domains', '__debug',
-                           '__contexts', '__eval_context', 'own_values'])
+                           '__contexts', '__eval_context', 'own_values', 'active_model', 'active_id', 'active_ids'])
 
 def non_literal_decoder(dct):
     """ Decodes JSON dicts into :class:`Domain` and :class:`Context` based on
@@ -205,7 +205,7 @@ class CompoundDomain(BaseDomain):
         self.eval_context = None
         for domain in domains:
             self.add(domain)
-        
+
     def evaluate(self, context=None):
         ctx = dict(context or {})
         eval_context = self.get_eval_context()
@@ -225,15 +225,15 @@ class CompoundDomain(BaseDomain):
             domain.session = self.session
             final_domain.extend(domain.evaluate(ctx))
         return final_domain
-    
+
     def add(self, domain):
         self.domains.append(domain)
         return self
-    
+
     def set_eval_context(self, eval_context):
         self.eval_context = eval_context
         return self
-        
+
     def get_eval_context(self):
         return self.eval_context
 
@@ -244,7 +244,7 @@ class CompoundContext(BaseContext):
         self.session = None
         for context in contexts:
             self.add(context)
-    
+
     def evaluate(self, context=None):
         ctx = dict(context or {})
         eval_context = self.get_eval_context()
@@ -260,20 +260,20 @@ class CompoundContext(BaseContext):
             if isinstance(context_to_eval, dict):
                 final_context.update(context_to_eval)
                 continue
-            
+
             ctx.update(final_context)
 
             context_to_eval.session = self.session
             final_context.update(context_to_eval.evaluate(ctx))
         return final_context
-            
+
     def add(self, context):
         self.contexts.append(context)
         return self
-    
+
     def set_eval_context(self, eval_context):
         self.eval_context = eval_context
         return self
-        
+
     def get_eval_context(self):
         return self.eval_context

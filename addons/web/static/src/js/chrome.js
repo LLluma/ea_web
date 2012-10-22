@@ -751,8 +751,7 @@ openerp.web.Header =  openerp.web.OldWidget.extend(/** @lends openerp.web.Header
                         sidebar: false,
                         views_switcher: false,
                         pager: false,
-                        without_tab: true,
-
+                        without_tab: true
                     }
                 }));
             });
@@ -1082,7 +1081,7 @@ openerp.web.WebClient = openerp.web.OldWidget.extend(/** @lends openerp.web.WebC
                 self.action_manager.stop();
             self.action_manager = new openerp.web.ActionManager(self);
             //self.action_manager.appendTo($("#oe_app"));
-            //self.bind_hashchange();
+            self.bind_hashchange();
             self.set_title();
         });
     },

@@ -434,9 +434,6 @@
                         <span>Reload</span>
                     </button>
                 </div>
-                <h2 class="oe_view_title" t-if="self.flags.display_title !== false">
-                    <span class="oe_view_title_text"><t t-esc="self.display_title()"/></span>
-                </h2>
             </div>
             <div t-attf-id="#{prefix}_search" t-opentag="true"/>
             <t t-foreach="views" t-as="view">
@@ -468,11 +465,11 @@
             </td>
         </tr>
     </t>
-    <t t-jquery="h2.oe_view_title" t-operation="prepend">
+    <t t-jquery=".oe_vm_switch" t-operation="after">
         <a t-if="self.flags.display_title !== false" class="oe-shortcut-toggle" title="Add / Remove Shortcut..."
             href="javascript: void(0)"> </a>
     </t>
-    <t t-jquery="h2.oe_view_title" t-operation="after">
+    <t t-jquery=".oe_vm_switch" t-operation="after">
         <select t-if="self.session.debug" class="oe_debug_view"/>
     </t>
     <t t-jquery=".oe-view-manager-header" t-operation="after">
@@ -654,7 +651,7 @@
                     <t t-esc="column.string"/>
                 </th>
             </t>
-            <th/>
+            <th t-if="options.isClarkGable"/>
             <t t-foreach="columns" t-as="column">
                 <th t-if="!column.meta and column.invisible !== '1'" t-att-data-id="column.id"
                     t-att-class="((options.sortable and column.tag !== 'button') ? 'oe-sortable' : null)">
@@ -747,8 +744,11 @@
             </t>
         </div>
         <div class="oe_form_buttons" t-if="widget.options.action_buttons !== false">
-            <button type="button" class="oe_button oe_form_button_save">Save</button>
-            <button type="button" class="oe_button oe_form_button_cancel">Cancel</button>
+            <button type="button" class="oe_button oe_form_button_save oe_button_small" title="Save"><img height="16" width="16" src="/web/static/src/img/icons/gtk-floppy.png"/></button>
+            <button type="button" class="oe_button oe_form_button_cancel oe_button_small" title="Cancel"><img height="16" width="16" src="/web/static/src/img/icons/gtk-cancel.png"/></button>
+            <button type="button" class="oe_button oe_form_button_create oe_button_small" title="New"><img height="16" width="16" src="/web/static/src/img/icons/gtk-new.png"/></button>
+            <button type="button" class="oe_button oe_form_button_duplicate oe_button_small" title="Duplicate"><img height="16" width="16" src="/web/static/src/img/icons/gtk-copy.png"/></button>
+            <button type="button" class="oe_button oe_form_button_delete oe_button_small" title="Delete"><img height="16" width="16" src="/web/static/src/img/recycle_bin_empty.png"/></button>
         </div>
     </div>
     <t t-raw="frame.render()"/>
@@ -760,10 +760,10 @@
 </t>
 <t t-name="PageView" t-extend="FormView">
     <t t-jquery=".oe_form_buttons" t-operation="inner">
-        <button type="button" class="oe_button oe_form_button_edit">Edit</button>
-        <button type="button" class="oe_button oe_form_button_create">Create</button>
-        <button type="button" class="oe_button oe_form_button_duplicate">Duplicate</button>
-        <button type="button" class="oe_button oe_form_button_delete">Delete</button>
+        <button type="button" class="oe_button oe_form_button_edit oe_button_small" title="Edit"><img height="16" width="16" src="/web/static/src/img/pencil.gif"/></button>
+        <button type="button" class="oe_button oe_form_button_create oe_button_small" title="New"><img height="16" width="16" src="/web/static/src/img/icons/gtk-new.png"/></button>
+        <button type="button" class="oe_button oe_form_button_duplicate oe_button_small" title="Duplicate"><img height="16" width="16" src="/web/static/src/img/icons/gtk-copy.png"/></button>
+        <button type="button" class="oe_button oe_form_button_delete oe_button_small" title="Delete"><img height="16" width="16" src="/web/static/src/img/recycle_bin_empty.png"/></button>
     </t>
 </t>
 <t t-name="FormView.sidebar.attachments">

@@ -20,9 +20,6 @@ openerp.web.page = function (openerp) {
         on_loaded: function(data) {
             this._super(data);
             this.$form_header.find('button.oe_form_button_edit').click(this.on_button_edit);
-            this.$form_header.find('button.oe_form_button_create').click(this.on_button_create);
-            this.$form_header.find('button.oe_form_button_duplicate').click(this.on_button_duplicate);
-            this.$form_header.find('button.oe_form_button_delete').click(this.on_button_delete);
         },
         do_show: function() {
             if (this.dataset.index === null) {
@@ -32,42 +29,6 @@ openerp.web.page = function (openerp) {
         },
         on_button_edit: function() {
             return this.do_switch_view('form');
-        },
-        on_button_create: function() {
-            this.previous_index = this.dataset.index;
-            this.dataset.index = null;
-            return this.do_switch_view('form');
-        },
-        on_button_duplicate: function() {
-            var self = this;
-            var def = $.Deferred();
-            $.when(this.has_been_loaded).then(function() {
-                self.dataset.call('copy', [self.datarecord.id, {}, self.dataset.context]).then(function(new_id) {
-                    return self.on_created({ result : new_id });
-                }).then(function() {
-                    return self.do_switch_view('form');
-                }).then(function() {
-                    def.resolve();
-                });
-            });
-            return def.promise();
-        },
-        on_button_delete: function() {
-            var self = this;
-            var def = $.Deferred();
-            $.when(this.has_been_loaded).then(function() {
-                if (self.datarecord.id && confirm(_t("Do you really want to delete this record?"))) {
-                    self.dataset.unlink([self.datarecord.id]).then(function() {
-                        self.on_pager_action('next');
-                        def.resolve();
-                    });
-                } else {
-                    $.async_when().then(function () {
-                        def.reject();
-                    })
-                }
-            });
-            return def.promise();
         }
     });
 
@@ -188,7 +149,7 @@ openerp.web.page = function (openerp) {
                             context: self.build_context(),
                             views: [[false, 'page'], [false, 'form']],
                             target: 'current',
-                            name: self.string,
+                            name: self.string
                         });
                         return false;
                         });

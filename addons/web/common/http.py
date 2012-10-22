@@ -381,7 +381,7 @@ def session_context(request, storage_path, session_cookie='sessionid'):
                 # note that domains_store and contexts_store are append-only (we
                 # only ever add items to them), so we can just update one with the
                 # other to get the right result, if we want to merge the
-                # ``context`` dict we'll need something smarter    
+                # ``context`` dict we'll need something smarter
                 in_store = session_store.get(sid)
                 for k, v in request.session.iteritems():
                     stored = in_store.get(k)

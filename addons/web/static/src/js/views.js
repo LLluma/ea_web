@@ -137,13 +137,9 @@ session.web.ActionManager = session.web.OldWidget.extend({
             };
         }
         if (action.target === 'new') {
-            if (this.dialog == null) {
-                this.dialog = new session.web.Dialog(this, { width: '80%' });
-                if(on_close)
-                    this.dialog.on_close.add(on_close);
-            } else {
-                this.dialog_viewmanager.stop();
-            }
+            this.dialog = new session.web.Dialog(this, { width: '80%' });
+            if(on_close)
+                this.dialog.on_close.add(on_close);
             this.dialog.dialog_title = action.name;
             this.dialog_viewmanager = new session.web.ViewManagerAction(this, action);
             this.dialog_viewmanager.appendTo(this.dialog.$element);
@@ -190,9 +186,15 @@ session.web.ActionManager = session.web.OldWidget.extend({
         $('#' + this.element_id).addClass("ui-tabs-panel ui-widget-content ui-corner-bottom");
     },
     _activate_tab: function () {
-        $('#oe_app').tabs({
+        var tabs = $('#oe_app').tabs({
             closable: true,
-            closableClick: this.check_unsaved,
+            closableClick: this.check_unsaved
+            })
+        tabs.find( ".ui-tabs-nav" ).sortable({
+                axis: "x",
+                stop: function() {
+                    tabs.tabs( "refresh" );
+                }
             });
     },
     check_unsaved: function(event, ui) {

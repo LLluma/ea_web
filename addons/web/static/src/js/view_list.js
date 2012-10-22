@@ -897,6 +897,7 @@ openerp.web.ListView.List = openerp.web.Class.extend( /** @lends openerp.web.Lis
             .delegate('tr', 'dblclick', function (e) {
                 self.row_clicked(e, 'form');
             })
+			
     },
     row_clicked: function (e, view) {
         var self = this;

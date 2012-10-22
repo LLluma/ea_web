@@ -528,9 +528,9 @@ openerp.web.DataSet =  openerp.web.OldWidget.extend( /** @lends openerp.web.Data
     },
     alter_ids: function(n_ids) {
     	this.ids = n_ids;
-    },
+    }
 });
-openerp.web.DataSetStatic =  openerp.web.DataSet.extend({
+openerp.web.DataSetStatic = openerp.web.DataSet.extend({
     init: function(parent, model, context, ids) {
         this._super(parent, model, context);
         // all local records
@@ -808,7 +808,7 @@ openerp.web.BufferedDataSet = openerp.web.DataSetStatic.extend({
     alter_ids: function(n_ids) {
     	this._super(n_ids);
         this.on_change();
-    },
+    }
 });
 openerp.web.BufferedDataSet.virtual_id_regex = /^one2many_v_id_.*$/;
 

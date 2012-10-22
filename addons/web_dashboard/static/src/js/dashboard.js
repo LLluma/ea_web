@@ -177,6 +177,7 @@ openerp.web.form.DashBoard = openerp.web.form.Widget.extend({
             pager: false,
             low_profile: true,
             display_title: false,
+            without_tab: true,
             list: {
                 selectable: false
             }
@@ -187,7 +188,6 @@ openerp.web.form.DashBoard = openerp.web.form.Widget.extend({
         $action.parent().data('action_attrs', action_attrs);
         this.action_managers.push(am);
         am.appendTo($action);
-        action.flags.without_tab = true;
         am.do_action(action);
         am.do_action = function (action) {
             self.do_action(action);
